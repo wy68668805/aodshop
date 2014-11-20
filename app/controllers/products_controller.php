@@ -89,7 +89,6 @@ class ProductsController extends AppController {
 		$ProLimit = $this -> Level -> find('first',array('conditions' => array('Level.id' => $userLevelId['User']['level_id']),'recursive' => -1));
 		$limitProductNumber = $ProLimit['Level']['product_limit'];
 		$currentProductNumber = $this -> Product -> find('count',array('conditions' => array('Product.user_id' => $userid)));
-		
 		if($currentProductNumber < $limitProductNumber){
 			if (!empty($this->data)) {
 				$this -> data['Product']['clicks'] = 0;
@@ -119,37 +118,49 @@ class ProductsController extends AppController {
 	 * @name 商家查看自己产品的详情
 	 */
 	function bussinessViewProduct($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid product', true));
+		$product = $this -> Product -> find('first',array('conditions' => array('Product.id' => $id,'Product.user_id' => $_SESSION['Auth']['User']['id']),'recursive' => -1));
+			if(!empty($product)){
+			if (!$id) {
+				$this->Session->setFlash(__('Invalid product', true));
+				$this->redirect(array('action' => 'bussinessListProduct'));
+			}
+			$this->set('product', $this->Product->read(null, $id));
+		}else{
+			$this->Session->setFlash(__('Invalid id or userid for product', true));
 			$this->redirect(array('action' => 'bussinessListProduct'));
 		}
-		$this->set('product', $this->Product->read(null, $id));
 	}
 	
 	/**
 	 * @name 商家修改自己的产品信息
 	 */
 	function bussinessEditProduct($id = null){
-		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Invalid product', true));
+		$product = $this -> Product -> find('first',array('conditions' => array('Product.id' => $id,'Product.user_id' => $_SESSION['Auth']['User']['id']),'recursive' => -1));
+		if(!empty($product)){
+			if (!$id && empty($this->data)) {
+				$this->Session->setFlash(__('Invalid product', true));
+				$this->redirect(array('action' => 'bussinessListProduct'));
+			}
+			if (!empty($this->data)) {
+				$this -> data = $this -> Filehandle -> file_upload($this -> data, 'Product', 'picture');
+				if ($this->Product->save($this->data)) {
+					$this->Session->setFlash(__('The product has been saved', true));
+					$this->redirect(array('action' => 'bussinessListProduct'));
+				} else {
+					$this->Session->setFlash(__('The product could not be saved. Please, try again.', true));
+				}
+			}
+			if (empty($this->data)) {
+				$this->data = $this->Product->read(null, $id);
+			}
+			$districts = $this->Product->District->find('list');
+			$productCats = $this->Product->ProductCat->find('list');
+			$users = $this->Product->User->find('list');
+			$this->set(compact('districts', 'productCats', 'users'));
+		}else{
+			$this->Session->setFlash(__('Invalid id or userid for product', true));
 			$this->redirect(array('action' => 'bussinessListProduct'));
 		}
-		if (!empty($this->data)) {
-			$this -> data = $this -> Filehandle -> file_upload($this -> data, 'Product', 'picture');
-			if ($this->Product->save($this->data)) {
-				$this->Session->setFlash(__('The product has been saved', true));
-				$this->redirect(array('action' => 'bussinessListProduct'));
-			} else {
-				$this->Session->setFlash(__('The product could not be saved. Please, try again.', true));
-			}
-		}
-		if (empty($this->data)) {
-			$this->data = $this->Product->read(null, $id);
-		}
-		$districts = $this->Product->District->find('list');
-		$productCats = $this->Product->ProductCat->find('list');
-		$users = $this->Product->User->find('list');
-		$this->set(compact('districts', 'productCats', 'users'));
 	}
 	
 	/**
