@@ -232,3 +232,4 @@
 2014-11-19 15:43:39 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> 1054: Unknown column 'GrouppurchaseProduct.userid' in 'where clause'</span> in [E:\Projects\PHP\aodshop\cake\libs\model\datasources\dbo_source.php, line 684]
 2014-11-19 15:43:39 Warning: Warning (2): Invalid argument supplied for foreach() in [E:\Projects\PHP\aodshop\app\views\grouppurchase_products\bussiness_list_group_product.ctp, line 26]
 2014-11-20 00:56:31 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> 1048: Column 'price' cannot be null</span> in [E:\Projects\PHP\aodshop\cake\libs\model\datasources\dbo_source.php, line 684]
+2014-11-20 21:58:29 Warning: Warning (2): preg_match() expects parameter 2 to be string, array given in [F:\Projects\PHP\aodshop\cake\libs\validation.php, line 946]

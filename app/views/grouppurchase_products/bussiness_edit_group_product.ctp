@@ -1,8 +1,9 @@
 <div class="grouppurchaseProducts form">
 <?php echo $this->Form->create('GrouppurchaseProduct',array('type' => 'file'));?>
 	<fieldset>
-		<legend><?php __('Add Grouppurchase Product'); ?></legend>
+		<legend><?php __('Edit Grouppurchase Product'); ?></legend>
 	<?php
+		echo $this->Form->input('id');
 		echo $this->Form->input('name');
 		echo $this->Form->input('picture',array('type' => 'file'));
 		echo $this->Form->input('price');
